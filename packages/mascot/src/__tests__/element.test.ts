@@ -36,10 +36,10 @@ describe('VakaoMascotElement', () => {
     expect(element).toBeInstanceOf(VakaoMascotElement);
     expect(element.shadowRoot).toBeTruthy();
     expect(avatarOf(element)).toBeTruthy();
-    expect(avatarOf(element).getAttribute('aria-label')).toBe('和 VaKao 星芒打个招呼');
-    expect(element.shadowRoot!.querySelector('[data-rig="halo"]')).toBeTruthy();
-    expect(element.shadowRoot!.querySelector('[data-rig="orbit"]')).toBeTruthy();
-    expect(element.shadowRoot!.querySelectorAll('#vkStarShape path').length).toBe(4);
+    expect(avatarOf(element).getAttribute('aria-label')).toBe('和星芒少女打个招呼');
+    expect(element.shadowRoot!.querySelectorAll('.eye-open').length).toBe(2);
+    expect(element.shadowRoot!.querySelector('#hairPin use')).toBeTruthy();
+    expect(element.shadowRoot!.querySelectorAll('[data-rig="shadow"]').length).toBe(1);
   });
 
   it('reflects size, greeting, theme, accent and label properties', () => {
@@ -105,23 +105,17 @@ describe('VakaoMascotElement', () => {
     expect(state.irisTransform).not.toBe('translate(0.00 0.00)');
   });
 
-  it('抽象星芒：小尺寸、轨道旋转与点击波纹', async () => {
+  it('在 24px 下仍渲染人形轮廓并能眨眼', async () => {
     const element = mount({ size: 24 });
+    const shadow = element.shadowRoot!;
+
     expect(element.style.getPropertyValue('--vk-mascot-size')).toBe('24px');
+    expect(shadow.querySelectorAll('.eye-open').length).toBe(2);
+    expect(shadow.querySelectorAll('[data-rig="eye-closed"]').length).toBe(1);
+    expect(shadow.querySelector('#hairBack path')).toBeTruthy();
 
-    const orbit = element.shadowRoot!.querySelector('[data-rig="orbit"]')!;
-    await new Promise((resolve) => setTimeout(resolve, 120));
-    expect(orbit.getAttribute('transform')).toContain('rotate(');
-
-    const ripple = element.shadowRoot!.querySelector('[data-rig="ripple"]')!;
-    expect(ripple.getAttribute('opacity')).toBe('0');
-
-    avatarOf(element).dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    await new Promise((resolve) => setTimeout(resolve, 60));
-    expect(ripple.getAttribute('opacity')).toBe('1');
-
-    await new Promise((resolve) => setTimeout(resolve, 1800));
-    expect(ripple.getAttribute('opacity')).toBe('0');
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    expect(element.debugState().blinkCount).toBeGreaterThan(0);
   });
 
   it('keeps the rig still when reduced motion is requested', async () => {

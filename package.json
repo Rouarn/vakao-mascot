@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "零依赖的右下角星芒看板角色 Web Component，内置呼吸脉冲、光晕眨眼与视线跟随；支持自定义 SVG 骨骼与可选的 Live2D 模型，并以子路径提供 React / Vue 封装。",
+  "description": "零依赖的右下角星芒少女看板娘 Web Component，内置呼吸、随机眨眼与视线跟随；形象使用 VaKao 品牌色与四芒星识别点；支持自定义 SVG 骨骼与可选的 Live2D 模型，并以子路径提供 React / Vue 封装。",
   "license": "MIT",
   "author": "Rouarn <2937375029@qq.com> (https://github.com/Rouarn)",
   "repository": {
