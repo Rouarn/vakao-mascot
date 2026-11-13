@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>vakao-mascot · 原生示例</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23f3b184'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <header>
+      <div class="wrap bar">
+        <div class="brand"><span class="dot"></span> vakao-mascot</div>
+        <span class="tag">Vanilla / &lt;script type="module"&gt;</span>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="hero">
+        <span class="kicker">原生 Web Component</span>
+        <h1>右下角的小人，<em>零依赖</em>接入。</h1>
+        <p class="lede">
+          本页只引用了构建后的 <code>@vakao/mascot/auto</code>，然后直接写
+          <code>&lt;vakao-mascot&gt;</code>。移动鼠标看视线，点击角色触发 greet 事件。
+        </p>
+      </section>
+
+      <section class="status">
+        <strong>greet 事件</strong>
+        <span>触发次数：<b id="greet-count">0</b></span>
+        <span>最近问候：<b id="greet-last">—</b></span>
+      </section>
+
+      <section class="cards">
+        <article class="card">
+          <h2>呼吸与眨眼</h2>
+          <p>约 4.2 秒的呼吸周期与 2.2–5.6 秒随机眨眼，全部在组件内部完成。</p>
+        </article>
+        <article class="card">
+          <h2>视线跟随</h2>
+          <p>监听全局 pointermove，瞳孔与头部带阻尼地跟随鼠标。</p>
+        </article>
+        <article class="card">
+          <h2>可配置</h2>
+          <p><code>size</code>、<code>greeting</code>、<code>theme</code>、<code>accent</code> 都是元素特性。</p>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">构建产物：packages/core/dist · 无第三方运行时依赖</div>
+    </footer>
+
+    <vakao-mascot size="210" greeting="嗨～ 今天也要开心哦！"></vakao-mascot>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
