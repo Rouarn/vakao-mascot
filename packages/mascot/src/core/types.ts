@@ -29,7 +29,7 @@ export interface VakaoMascotEventMap {
 
 /** 组件可配置项，React / Vue 封装共用。 */
 export interface VakaoMascotOptions {
-  /** 角色最大宽度，像素，默认 210，限制在 96–420。 */
+  /** 角色最大宽度，像素，默认 210，限制在 16–420。 */
   size?: number;
   /** 点击时气泡里的文字。 */
   greeting?: string;

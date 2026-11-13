@@ -276,7 +276,7 @@ export class VakaoMascotElement extends HTMLElementBase {
   private _applyStyles(): void {
     if (!this.isConnected && !this.shadowRoot) return;
 
-    const size = clamp(this.size, 96, 420);
+    const size = clamp(this.size, 16, 420);
     this.style.setProperty('--vk-mascot-size', `${size}px`);
 
     if (this.accent) {

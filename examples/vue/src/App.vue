@@ -23,7 +23,7 @@ function handleGreet(event: CustomEvent<MascotGreetDetail>): void {
   <main class="wrap">
     <section class="hero">
       <span class="kicker">Vue 封装</span>
-      <h1>用 <em>v-model 式的直觉</em>，接一个看板娘。</h1>
+      <h1>用 <em>v-model 式的直觉</em>，接一颗星芒。</h1>
       <p class="lede">
         属性走正常的 props，greet 事件用 <code>@greet</code> 接收；如果要在模板里直接写原生标签，
         <code>withVakaoMascot()</code> 已经处理掉自定义元素的编译告警。

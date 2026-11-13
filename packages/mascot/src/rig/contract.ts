@@ -18,7 +18,17 @@ export const RIG_MARKERS = {
   armLeft: 'arm-left',
   armRight: 'arm-right',
   shadow: 'shadow',
+  /** 以下为抽象角色可选节点，缺失时对应动画自动跳过。 */
+  halo: 'halo',
+  orbit: 'orbit',
+  blink: 'blink',
+  ripple: 'ripple',
+  burst: 'burst',
 } as const;
+
+/** 声明抽象形态（星芒、几何体等）：关闭头部倾斜，改用光晕脉冲与轨道旋转驱动。 */
+export const ABSTRACT_MODE_ATTRIBUTE = 'data-rig-mode';
+export const ABSTRACT_MODE_VALUE = 'abstract';
 
 /** 缺少任意一个都会回退到默认角色。 */
 export const REQUIRED_RIG_MARKERS = ['head', 'eye-left', 'eye-right'] as const;

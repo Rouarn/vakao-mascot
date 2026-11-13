@@ -113,6 +113,41 @@ describe('自定义 SVG 角色', () => {
     expect(shadow.querySelector('[data-rig="head"]')).toBeTruthy();
   });
 
+  it('抽象形态关闭主体旋转，只做平移与光晕脉冲', async () => {
+    const element = mount(`
+      <svg viewBox="0 0 100 120" data-rig-mode="abstract" xmlns="http://www.w3.org/2000/svg">
+        <g data-rig="rig" data-rig-origin="50 60">
+          <g data-rig="blink"><g data-rig="halo"><circle cx="50" cy="60" r="30" fill="#46a6c6"/></g></g>
+          <g data-rig="head">
+            <circle cx="50" cy="60" r="20" fill="#f0995f"/>
+            <g data-rig="eye-left"><circle data-rig="iris-left" cx="44" cy="58" r="2"/></g>
+            <g data-rig="eye-right"><circle data-rig="iris-right" cx="56" cy="58" r="2"/></g>
+          </g>
+        </g>
+      </svg>`);
+    const shadow = element.shadowRoot!;
+    const avatar = shadow.querySelector('.avatar') as HTMLButtonElement;
+    vi.spyOn(avatar, 'getBoundingClientRect').mockReturnValue({
+      x: 100,
+      y: 100,
+      width: 200,
+      height: 240,
+      top: 100,
+      left: 100,
+      right: 300,
+      bottom: 340,
+      toJSON: () => ({}),
+    } as DOMRect);
+
+    window.dispatchEvent(new MouseEvent('pointermove', { clientX: 700, clientY: 380 }));
+    await waitFor(() => element.debugState().gaze.x > 0.4, 1200);
+
+    const headTransform = shadow.querySelector('[data-rig="head"]')!.getAttribute('transform')!;
+    expect(headTransform).toContain('translate(');
+    expect(headTransform).not.toContain('rotate(');
+    expect(shadow.querySelector('[data-rig="halo"]')!.getAttribute('opacity')).toBeTruthy();
+  });
+
   it('支持按名称注册角色并用 rig 特性引用', () => {
     defineVakaoMascotRig('mini-rig', CUSTOM_RIG);
     expect(listVakaoMascotRigs()).toContain('mini-rig');

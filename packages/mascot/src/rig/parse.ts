@@ -1,4 +1,6 @@
 import {
+  ABSTRACT_MODE_ATTRIBUTE,
+  ABSTRACT_MODE_VALUE,
   DEFAULT_GAZE_RANGE,
   DEFAULT_VIEWBOX,
   REQUIRED_RIG_MARKERS,
@@ -30,6 +32,14 @@ export interface MascotRig {
   armL: SVGGElement | null;
   armR: SVGGElement | null;
   shadow: SVGGraphicsElement | null;
+  /** 抽象角色可选节点：光晕、轨道、眨眼脉冲层、点击波纹与粒子。 */
+  halo: SVGGraphicsElement | null;
+  orbit: SVGGElement | null;
+  blinkLayer: SVGGElement | null;
+  ripple: SVGGElement | null;
+  burst: SVGGElement | null;
+  /** 抽象形态：不做头部倾斜，改为轨道旋转、光晕脉冲。 */
+  abstract: boolean;
   origin: Point;
   headPivot: Point;
   hairPivot: Point;
@@ -188,6 +198,12 @@ export function buildMascotRig(shadowRoot: ShadowRoot): RigBuildResult {
     armL: marker<SVGGElement>(svg, RIG_MARKERS.armLeft),
     armR,
     shadow,
+    halo: marker<SVGGraphicsElement>(svg, RIG_MARKERS.halo),
+    orbit: marker<SVGGElement>(svg, RIG_MARKERS.orbit),
+    blinkLayer: marker<SVGGElement>(svg, RIG_MARKERS.blink),
+    ripple: marker<SVGGElement>(svg, RIG_MARKERS.ripple),
+    burst: marker<SVGGElement>(svg, RIG_MARKERS.burst),
+    abstract: svg.getAttribute(ABSTRACT_MODE_ATTRIBUTE) === ABSTRACT_MODE_VALUE,
     origin,
     headPivot: pivotOf(head, center),
     hairPivot: pivotOf(marker(svg, RIG_MARKERS.hairBack), center),
