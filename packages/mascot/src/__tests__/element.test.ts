@@ -40,6 +40,9 @@ describe('VakaoMascotElement', () => {
     expect(element.shadowRoot!.querySelectorAll('.eye-open').length).toBe(2);
     expect(element.shadowRoot!.querySelector('#hairPin use')).toBeTruthy();
     expect(element.shadowRoot!.querySelectorAll('[data-rig="shadow"]').length).toBe(1);
+    // 双色丝网层：橙色网点版 + 墨色块面（深色主题下需要整体提亮）
+    expect(element.shadowRoot!.querySelector('#vkDots')).toBeTruthy();
+    expect(element.shadowRoot!.querySelectorAll('.ink-solid').length).toBeGreaterThanOrEqual(4);
   });
 
   it('reflects size, greeting, theme, accent and label properties', () => {
