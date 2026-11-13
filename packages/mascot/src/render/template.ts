@@ -2,7 +2,7 @@ const TEMPLATE_HTML = `
 <style>
   :host {
     --vk-mascot-size: 210px;
-    --vk-mascot-accent: #46a6c6;
+    --vk-mascot-accent: #f0995f;
     --vk-mascot-offset-x: clamp(12px, 2vw, 20px);
     --vk-mascot-offset-y: clamp(10px, 1.6vw, 16px);
     --vk-mascot-bubble-bg: #faf9f5;
@@ -55,10 +55,11 @@ const TEMPLATE_HTML = `
   .avatar svg { display: block; width: 100%; height: 100%; overflow: visible; }
   .eye-open { transition: opacity 70ms linear; }
   .eye-closed { opacity: 0; transition: opacity 70ms linear; }
-  .hair-edge { stroke: transparent; }
-  :host([theme="dark"]) .hair-edge { stroke: #8c877d; stroke-opacity: 0.5; }
+  /* 墨色块面在深色背景上补一圈淡灰轮廓，避免糊进背景。 */
+  .ink-edge { stroke: transparent; stroke-linejoin: round; }
+  :host([theme="dark"]) .ink-edge { stroke: #8c877d; stroke-opacity: 0.5; }
   @media (prefers-color-scheme: dark) {
-    :host(:not([theme="light"])) .hair-edge { stroke: #8c877d; stroke-opacity: 0.5; }
+    :host(:not([theme="light"])) .ink-edge { stroke: #8c877d; stroke-opacity: 0.5; }
   }
 
   .bubble {
@@ -94,7 +95,7 @@ const TEMPLATE_HTML = `
 <div class="stage">
   <div class="bubble" role="status" aria-live="polite"></div>
   <button class="avatar" type="button" aria-label="和星芒少女打个招呼">
-    <svg viewBox="0 0 220 260" role="img" aria-hidden="true" focusable="false" data-rig-gaze="3.4 2.8">
+    <svg viewBox="0 0 220 260" role="img" aria-hidden="true" focusable="false" data-rig-gaze="1.6 1.4">
       <defs>
         <g id="vkStar4" fill="currentColor">
           <path d="M 1024 1024 C 1024 1024 718.15 718.15 718.15 718.15
@@ -114,95 +115,178 @@ const TEMPLATE_HTML = `
                    C 1090.114 282.875 1192.064 508.605 1329.85 718.15
                    C 1329.85 718.15 1024 1024 1024 1024 Z" transform="rotate(270 1024 1024)"/>
         </g>
-        <clipPath id="vkEyeClipL"><circle cx="95" cy="110" r="5.8"/></clipPath>
-        <clipPath id="vkEyeClipR"><circle cx="125" cy="110" r="5.8"/></clipPath>
+        <clipPath id="vkFaceClip">
+          <path d="M 110 40
+                   C 100.6 40 94.2 46.4 93.4 55.4
+                   C 92.8 62.4 94.4 69.4 97.8 73.6
+                   C 101.2 76.8 118.8 76.8 122.2 73.6
+                   C 125.6 69.4 127.2 62.4 126.6 55.4
+                   C 125.8 46.4 119.4 40 110 40 Z"/>
+        </clipPath>
       </defs>
 
-      <g id="rig" data-rig="rig" data-rig-origin="110 240">
-        <ellipse id="shadow" data-rig="shadow" cx="110" cy="247" rx="44" ry="5.5" fill="#171512" opacity="0.16"/>
+      <g id="rig" data-rig="rig" data-rig-origin="110 242">
+        <ellipse id="shadow" data-rig="shadow" cx="110" cy="242" rx="29" ry="3.8" fill="#171512" opacity="0.16"/>
 
-        <g id="hairBack" data-rig="hair-back" data-rig-pivot="110 138">
-          <path d="M 110 50 C 141 50 161 71 161 104 C 161 124 156 141 150 156
-                   C 145 150 141 144 138 138 C 135 147 131 155 127 162
-                   C 123 152 119 143 116 136 C 112 145 108 154 104 162
-                   C 100 152 96 143 92 136 C 88 144 84 150 79 156
-                   C 72 140 59 123 59 104 C 59 71 79 50 110 50 Z"
-                fill="#171512"/>
-          <path d="M 110 50 C 141 50 161 71 161 104 C 161 124 156 141 150 156
-                   C 145 150 141 144 138 138 C 135 147 131 155 127 162
-                   C 123 152 119 143 116 136 C 112 145 108 154 104 162
-                   C 100 152 96 143 92 136 C 88 144 84 150 79 156
-                   C 72 140 59 123 59 104 C 59 71 79 50 110 50 Z"
-                class="hair-edge" fill="none" stroke-width="1.4"/>
+        <g id="legs">
+          <path d="M 103.2 168 L 103.2 228" stroke="#171512" stroke-opacity="0.26" stroke-width="12.2" stroke-linecap="round"/>
+          <path d="M 116.8 168 L 116.8 228" stroke="#171512" stroke-opacity="0.26" stroke-width="12.2" stroke-linecap="round"/>
+          <path d="M 103.2 168 L 103.2 228" stroke="#faf9f5" stroke-width="10.4" stroke-linecap="round"/>
+          <path d="M 116.8 168 L 116.8 228" stroke="#faf9f5" stroke-width="10.4" stroke-linecap="round"/>
+          <rect x="95.9" y="226" width="14" height="10.5" rx="5.2" fill="#171512" class="ink-edge"/>
+          <rect x="110.3" y="226" width="14" height="10.5" rx="5.2" fill="#171512" class="ink-edge"/>
         </g>
 
         <g id="body" data-rig="body">
-          <rect x="102" y="126" width="16" height="22" rx="8" fill="#faf9f5" stroke="#8c877d" stroke-opacity="0.3"/>
-          <path d="M 86 146 L 134 146 L 151 214 Q 110 227 69 214 Z" fill="#46a6c6"/>
-          <circle cx="86" cy="153" r="13.5" fill="#46a6c6"/>
-          <circle cx="134" cy="153" r="13.5" fill="#46a6c6"/>
-          <path d="M 96 146 L 110 161 L 124 146 Z" fill="#faf9f5"/>
-          <path d="M 76 186 Q 110 195 144 186 L 144 193 Q 110 202 76 193 Z" fill="#a27fc2"/>
-          <path d="M 70 208 Q 110 220 150 208 L 151 214 Q 110 227 69 214 Z" fill="#faf9f5" opacity="0.92"/>
-          <use href="#vkStar4" transform="translate(91 216) scale(0.0043) translate(-1024 -1024)" style="color:#a27fc2"/>
-          <use href="#vkStar4" transform="translate(129 216) scale(0.0043) translate(-1024 -1024)" style="color:#eddf55"/>
-          <use href="#vkStar4" transform="translate(110 171) scale(0.0062) translate(-1024 -1024)" style="color:#eddf55"/>
-          <path d="M 100 220 L 100 234" stroke="#faf9f5" stroke-width="9" stroke-linecap="round"/>
-          <path d="M 120 220 L 120 234" stroke="#faf9f5" stroke-width="9" stroke-linecap="round"/>
-          <ellipse cx="100" cy="238" rx="9" ry="5" fill="#171512"/>
-          <ellipse cx="120" cy="238" rx="9" ry="5" fill="#171512"/>
+          <path d="M 110 88
+                   C 102.4 88 96.4 90.6 94.2 94.4
+                   C 93.2 101 94 108.8 96 114.2
+                   C 94.2 121 90.6 130 87.6 140
+                   C 85 150 83.2 158 82.2 164.8
+                   C 90.2 168.8 99.6 170.8 110 170.8
+                   C 120.4 170.8 129.8 168.8 137.8 164.8
+                   C 136.8 158 135 150 132.4 140
+                   C 129.4 130 125.8 121 124 114.2
+                   C 126 108.8 126.8 101 125.8 94.4
+                   C 123.6 90.6 117.6 88 110 88 Z"
+                fill="#efe7d9" stroke="#171512" stroke-opacity="0.5" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M 110 88
+                   C 102.4 88 96.4 90.6 94.2 94.4
+                   C 93.2 101 94 108.8 96 114.2
+                   C 94.2 121 90.6 130 87.6 140
+                   C 85 150 83.2 158 82.2 164.8
+                   C 90.2 168.8 99.6 170.8 110 170.8
+                   C 120.4 170.8 129.8 168.8 137.8 164.8
+                   C 136.8 158 135 150 132.4 140
+                   C 129.4 130 125.8 121 124 114.2
+                   C 126 108.8 126.8 101 125.8 94.4
+                   C 123.6 90.6 117.6 88 110 88 Z"
+                fill="#8c877d" opacity="0.07"/>
+          <path d="M 118.6 90
+                   C 122.6 100 123.4 108.6 123.6 114.5
+                   C 126 121 129.6 130 132.4 140
+                   C 134.8 150 136.4 158 137 162.5
+                   C 133 165.4 127.8 167.4 122.4 168.4
+                   C 124.4 150 119.6 132 114 119.6
+                   C 117 110 116.4 99.6 114.4 91.6 Z"
+                fill="#171512" opacity="0.09"/>
+          <path d="M 83.4 164.6
+                   C 93.4 168.2 126.6 168.2 136.6 164.6
+                   C 134.8 167 132.2 168.6 129 169.4
+                   C 117 171.8 103 171.8 91 169.4
+                   C 87.8 168.6 85.2 167 83.4 164.6 Z"
+                fill="#171512" opacity="0.07"/>
+          <path d="M 96.4 112.6
+                   C 105 116.4 115 116.4 123.6 112.6
+                   L 124.2 118.4
+                   C 115 122.2 105 122.2 95.8 118.4 Z"
+                fill="#a27fc2" opacity="0.88"/>
+          <path d="M 102 90 C 105 93 115 93 118 90"
+                stroke="#171512" stroke-opacity="0.3" stroke-width="1.2"
+                fill="none" stroke-linecap="round"/>
+          <path d="M 105 134 C 103.4 145 102.2 155 101.4 162" stroke="#171512" stroke-opacity="0.05"
+                stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M 115 133 C 116.4 144 117.4 155 117.8 162" stroke="#171512" stroke-opacity="0.05"
+                stroke-width="3" fill="none" stroke-linecap="round"/>
         </g>
 
-        <g id="armL" data-rig="arm-left" data-rig-pivot="86 154">
-          <path d="M 86 154 L 77 192" stroke="#8c877d" stroke-opacity="0.28" stroke-width="11.6" stroke-linecap="round"/>
-          <path d="M 86 154 L 77 192" stroke="#faf9f5" stroke-width="9.5" stroke-linecap="round"/>
-          <circle cx="77" cy="196" r="6.4" fill="#8c877d" fill-opacity="0.28"/>
-          <circle cx="77" cy="196" r="5.4" fill="#faf9f5"/>
+        <g id="armL" data-rig="arm-left" data-rig-pivot="93 95">
+          <path d="M 92.6 101
+                   C 89.8 110 88.6 120 88.5 129.5
+                   C 88.4 132.6 88.7 135.6 89.4 138.2
+                   C 92.6 140.4 95.2 138.2 94.6 135.2
+                   C 94 131.6 93.9 128 94.1 125
+                   C 94.4 116 95.2 108 96.6 102 Z"
+                fill="#faf9f5" stroke="#171512" stroke-opacity="0.3" stroke-width="1" stroke-linejoin="round"/>
+          <path d="M 89.2 131.4 C 90.9 132.4 92.6 132.4 93.8 131.6" stroke="#8c877d"
+                stroke-opacity="0.6" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+          <path d="M 96.2 90.2
+                   C 90.2 91.4 87 96.6 87.6 102.4
+                   C 88 106.6 91.8 108.2 94.8 105.6
+                   C 97.6 103 98.2 96 96.6 90.8 Z"
+                fill="#efe7d9" stroke="#171512" stroke-opacity="0.5" stroke-width="1.3" stroke-linejoin="round"/>
         </g>
-        <g id="armR" data-rig="arm-right" data-rig-pivot="134 154">
-          <path d="M 134 154 L 143 192" stroke="#8c877d" stroke-opacity="0.28" stroke-width="11.6" stroke-linecap="round"/>
-          <path d="M 134 154 L 143 192" stroke="#faf9f5" stroke-width="9.5" stroke-linecap="round"/>
-          <circle cx="143" cy="196" r="6.4" fill="#8c877d" fill-opacity="0.28"/>
-          <circle cx="143" cy="196" r="5.4" fill="#faf9f5"/>
+        <g id="armR" data-rig="arm-right" data-rig-pivot="127 95">
+          <path d="M 127.4 101
+                   C 130.2 110 131.4 120 131.5 129.5
+                   C 131.6 132.6 131.3 135.6 130.6 138.2
+                   C 127.4 140.4 124.8 138.2 125.4 135.2
+                   C 126 131.6 126.1 128 125.9 125
+                   C 125.6 116 124.8 108 123.4 102 Z"
+                fill="#faf9f5" stroke="#171512" stroke-opacity="0.3" stroke-width="1" stroke-linejoin="round"/>
+          <path d="M 126.2 131.6 C 127.4 132.4 129.1 132.4 130.8 131.4" stroke="#8c877d"
+                stroke-opacity="0.6" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+          <path d="M 123.8 90.2
+                   C 129.8 91.4 133 96.6 132.4 102.4
+                   C 132 106.6 128.2 108.2 125.2 105.6
+                   C 122.4 103 121.8 96 123.4 90.8 Z"
+                fill="#efe7d9" stroke="#171512" stroke-opacity="0.5" stroke-width="1.3" stroke-linejoin="round"/>
         </g>
 
-        <g id="head" data-rig="head" data-rig-pivot="110 138">
-          <ellipse cx="110" cy="104" rx="33" ry="32" fill="#faf9f5" stroke="#8c877d" stroke-opacity="0.32"/>
-          <ellipse cx="86" cy="120" rx="5.5" ry="2.8" fill="#f0995f" opacity="0.32"/>
-          <ellipse cx="134" cy="120" rx="5.5" ry="2.8" fill="#f0995f" opacity="0.32"/>
-          <path d="M 105 123 Q 110 127.5 115 123" stroke="#171512" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+        <g id="neck">
+          <path d="M 103.9 68 L 103.9 89.6 Q 110 92.2 116.1 89.6 L 116.1 68 Z" fill="#faf9f5"/>
+          <ellipse cx="110" cy="74.6" rx="4.8" ry="2.6" fill="#171512" opacity="0.07"/>
+        </g>
 
-          <path d="M 110 58 C 133 58 149 73 150 97
-                   C 144 90 139 86 134 84 C 131 91 126 93 122 89
-                   C 118 95 112 96 107 91 C 103 96 96 95 92 88
-                   C 87 93 79 93 74 98 C 75 73 89 58 110 58 Z"
-                fill="#171512"/>
+        <g id="head" data-rig="head" data-rig-pivot="110 84">
+          <g id="hairBack" data-rig="hair-back" data-rig-pivot="124 42">
+            <ellipse cx="126" cy="42.5" rx="8.2" ry="7.6" fill="#171512" class="ink-edge" stroke-width="1.5"/>
+            <path d="M 121 37.6 C 124 35.4 128 35.6 131 37.8"
+                  stroke="#8c877d" stroke-opacity="0.22" stroke-width="2.4"
+                  fill="none" stroke-linecap="round"/>
+          </g>
+
+          <path d="M 110 40
+                   C 100.6 40 94.2 46.4 93.4 55.4
+                   C 92.8 62.4 94.4 69.4 97.8 73.6
+                   C 101.2 76.8 118.8 76.8 122.2 73.6
+                   C 125.6 69.4 127.2 62.4 126.6 55.4
+                   C 125.8 46.4 119.4 40 110 40 Z"
+                fill="#faf9f5"/>
+          <g clip-path="url(#vkFaceClip)">
+            <path d="M 96.4 54 C 99.4 50 104 48 110 48.4 C 116 48 120.6 50 123.6 54
+                     C 121 51 116.6 49.8 110 50.6 C 103.4 49.8 99 51 96.4 54 Z"
+                  fill="#171512" opacity="0.07"/>
+            <ellipse cx="122.4" cy="61" rx="5.2" ry="11" fill="#171512" opacity="0.05"/>
+          </g>
+
+          <ellipse cx="100.4" cy="68.6" rx="2.4" ry="1.4" fill="#f0995f" opacity="0.3"/>
+          <ellipse cx="119.6" cy="68.6" rx="2.4" ry="1.4" fill="#f0995f" opacity="0.3"/>
 
           <g class="eye-open" data-rig="eye-left">
-            <circle cx="95" cy="110" r="5.8" fill="#46a6c6"/>
-            <g data-rig="iris-left" clip-path="url(#vkEyeClipL)">
-              <circle cx="95.4" cy="111.2" r="2.7" fill="#171512"/>
-              <circle cx="93.9" cy="109.4" r="1.25" fill="#faf9f5"/>
-              <use href="#vkStar4" transform="translate(97.8 108.4) scale(0.0019) translate(-1024 -1024)" style="color:#faf9f5"/>
+            <g data-rig="iris-left" clip-path="url(#vkFaceClip)">
+              <ellipse cx="104.6" cy="60.6" rx="3.2" ry="4.2" fill="#171512"/>
+              <circle cx="103.5" cy="58.8" r="1.1" fill="#faf9f5"/>
             </g>
-            <path d="M 88.6 106.2 Q 95 102 101.4 106.2" stroke="#171512" stroke-width="1.5" fill="none" stroke-linecap="round"/>
           </g>
           <g class="eye-open" data-rig="eye-right">
-            <circle cx="125" cy="110" r="5.8" fill="#46a6c6"/>
-            <g data-rig="iris-right" clip-path="url(#vkEyeClipR)">
-              <circle cx="125.4" cy="111.2" r="2.7" fill="#171512"/>
-              <circle cx="123.9" cy="109.4" r="1.25" fill="#faf9f5"/>
-              <use href="#vkStar4" transform="translate(127.8 108.4) scale(0.0019) translate(-1024 -1024)" style="color:#faf9f5"/>
+            <g data-rig="iris-right" clip-path="url(#vkFaceClip)">
+              <ellipse cx="115.4" cy="60.6" rx="3.2" ry="4.2" fill="#171512"/>
+              <circle cx="114.3" cy="58.8" r="1.1" fill="#faf9f5"/>
             </g>
-            <path d="M 118.6 106.2 Q 125 102 131.4 106.2" stroke="#171512" stroke-width="1.5" fill="none" stroke-linecap="round"/>
           </g>
           <g class="eye-closed" data-rig="eye-closed">
-            <path d="M 88.8 110.5 Q 95 115.2 101.2 110.5" stroke="#171512" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-            <path d="M 118.8 110.5 Q 125 115.2 131.2 110.5" stroke="#171512" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path d="M 101.4 60.4 Q 104.6 62.7 107.8 60.4" stroke="#171512" stroke-width="1.4"
+                  fill="none" stroke-linecap="round"/>
+            <path d="M 112.2 60.4 Q 115.4 62.7 118.6 60.4" stroke="#171512" stroke-width="1.4"
+                  fill="none" stroke-linecap="round"/>
           </g>
 
+          <path d="M 94.2 70
+                   C 92.2 55 96.6 38.6 106.8 34.8
+                   C 115.4 31.8 124.2 35.6 126.8 43.2
+                   C 128 46.4 127.6 50 126.4 52.4
+                   C 125.4 47.4 122.4 44.4 118.4 43.8
+                   C 115.6 49.6 111.6 51.6 107 51.8
+                   C 102.4 52 99.2 55.6 97.8 62.4
+                   C 96.8 66.4 96 69.4 94.2 70 Z"
+                fill="#171512" class="ink-edge" stroke-width="1.6"/>
+          <path d="M 100 44.6 C 104 39.6 110 37.6 116.4 38.2"
+                stroke="#8c877d" stroke-opacity="0.18" stroke-width="2.2"
+                fill="none" stroke-linecap="round"/>
+
           <g id="hairPin">
-            <use href="#vkStar4" transform="translate(151 74) scale(0.0153) translate(-1024 -1024)" style="color:#f0995f"/>
+            <use href="#vkStar4" transform="translate(130 40) scale(0.0054) translate(-1024 -1024)" style="color:#f0995f"/>
           </g>
         </g>
       </g>
