@@ -1,7 +1,7 @@
 {
   "name": "@vakao/mascot",
   "version": "0.1.0",
-  "description": "Dependency-free bottom-right mascot Web Component with breathing, blinking and gaze tracking, plus optional React and Vue bindings.",
+  "description": "零依赖的右下角看板娘 Web Component，内置呼吸、眨眼与视线跟随，并以子路径提供可选的 React / Vue 封装。",
   "license": "MIT",
   "type": "module",
   "author": "Rouarn <2937375029@qq.com> (https://github.com/Rouarn)",
