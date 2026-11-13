@@ -3,7 +3,7 @@
 import { createSSRApp, h } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { describe, expect, it } from 'vitest';
-import { VakaoMascot } from './vue';
+import { VakaoMascot } from '../vue';
 
 describe('VakaoMascot (Vue SSR)', () => {
   it('renders markup without touching DOM globals', async () => {

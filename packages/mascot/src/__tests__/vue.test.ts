@@ -1,8 +1,8 @@
 import { createApp, h, nextTick, ref } from 'vue';
 import type { App } from 'vue';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { VakaoMascotElement } from './index';
-import { VakaoMascot } from './vue';
+import type { VakaoMascotElement } from '../index';
+import { VakaoMascot } from '../vue';
 
 let container: HTMLDivElement;
 let app: App | null = null;

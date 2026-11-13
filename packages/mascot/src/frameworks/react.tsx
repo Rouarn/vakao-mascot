@@ -7,18 +7,14 @@ import {
   useRef,
 } from 'react';
 import type { ForwardedRef, HTMLAttributes, MutableRefObject } from 'react';
-import {
-  DEFAULT_SIZE,
-  MASCOT_EVENTS,
-  VAKAO_MASCOT_TAG,
-  defineVakaoMascot,
-} from './index';
+import { DEFAULT_SIZE, MASCOT_EVENTS, VAKAO_MASCOT_TAG } from '../core/constants';
+import { defineVakaoMascot } from '../core/element';
+import type { VakaoMascotElement } from '../core/element';
 import type {
   MascotGreetDetail,
   MascotReadyDetail,
   MascotTheme,
-  VakaoMascotElement,
-} from './index';
+} from '../core/types';
 
 export interface VakaoMascotProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
   /** 角色最大宽度，像素，默认 210。 */

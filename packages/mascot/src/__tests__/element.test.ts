@@ -4,7 +4,7 @@ import {
   VAKAO_MASCOT_TAG,
   VakaoMascotElement,
   defineVakaoMascot,
-} from './index';
+} from '../index';
 
 const mount = (attributes: Record<string, string | number> = {}): VakaoMascotElement => {
   const element = document.createElement(VAKAO_MASCOT_TAG) as VakaoMascotElement;

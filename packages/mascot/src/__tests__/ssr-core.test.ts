@@ -1,7 +1,7 @@
 // @vitest-environment node
 
 import { describe, expect, it } from 'vitest';
-import { VAKAO_MASCOT_TAG, defineVakaoMascot } from './index';
+import { VAKAO_MASCOT_TAG, defineVakaoMascot } from '../index';
 
 describe('server environment', () => {
   it('imports and calls define without touching DOM globals', () => {

@@ -2,9 +2,9 @@ import { act, createRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { VAKAO_MASCOT_TAG } from './index';
-import type { VakaoMascotElement } from './index';
-import { VakaoMascot } from './react';
+import { VAKAO_MASCOT_TAG } from '../index';
+import type { VakaoMascotElement } from '../index';
+import { VakaoMascot } from '../react';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 

@@ -8,7 +8,7 @@ export default defineConfig({
       entry: {
         index: 'src/index.ts',
         auto: 'src/auto.ts',
-        react: 'src/react.tsx',
+        react: 'src/react.ts',
         vue: 'src/vue.ts',
         'vue-vite': 'src/vue-vite.ts',
       },
@@ -17,6 +17,10 @@ export default defineConfig({
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime', 'vue'],
+      output: {
+        // 共享模块使用固定文件名，避免带 hash 的产物名进入发布包。
+        chunkFileNames: 'chunks/[name].js',
+      },
     },
   },
 });
