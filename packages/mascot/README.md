@@ -3,7 +3,8 @@
 一个固定在页面右下角的小看板娘：呼吸、眨眼、视线跟随、点击挥手与气泡。核心是**零依赖的 Web Component**（原生 JS + Shadow DOM + 内联 SVG 分层骨骼），React 与 Vue 封装通过子路径提供，且都是可选 peer 依赖。
 
 - 原生入口零运行时依赖；不安装 React / Vue 也不会被迫下载它们
-- 一个包、五个入口：`.`、`./auto`、`./react`、`./vue`、`./vue/vite`
+- 一个包、五个主入口：`.`、`./auto`、`./react`、`./vue`、`./vue/vite`；另有可选的 `./live2d`
+- 角色可替换：内置 SVG 可通过骨骼契约换成你自己的分层 SVG，也可按需接入 Live2D 模型
 - 无图片、无模型、无字体，角色为自绘原创形象
 
 ## 安装
@@ -159,6 +160,39 @@ mascot.rig = 'mini';        // 也可以直接给 SVG 字符串 / 元素
 注入的 SVG 会先清洗：移除 `<script>`、事件属性、外部引用与非本地 `<use>`，避免把 SVG 注入变成 XSS 入口；缺少必需节点或解析失败时会打印错误并回退默认角色。
 
 完整的节点表、锚点属性、视口约定与参数范围见 [docs/rig-contract.md](./docs/rig-contract.md)。
+
+## Live2D 模型（可选子路径）
+
+如果你更想用 Live2D Cubism 4 模型，可以按需引入独立入口：
+
+```bash
+pnpm add @vakao/mascot
+pnpm add pixi.js@^6.5.0 pixi-live2d-display@^0.4.0
+```
+
+```html
+<!-- Cubism Core 必须由你自行提供，见下方授权说明 -->
+<script src="/live2dcubismcore.min.js"></script>
+
+<script type="module">
+  import '@vakao/mascot/live2d';
+</script>
+
+<vakao-live2d src="/models/haru/haru_greeter_t03.model3.json" motion="Tap" size="260"></vakao-live2d>
+```
+
+- `pixi.js` / `pixi-live2d-display` 是可选 peer 依赖，不用 Live2D 时不会被安装或打包；
+- 主入口不引用这个子路径，主包体积不受影响；
+- 支持视线跟随、待机动作、点击动作，尺寸与右下角定位与 SVG 角色一致；
+- 属性：`src`（`.model3.json`）、`size`、`motion`（点击动作组）、`idle`（待机动作组）。
+
+### 授权（重要）
+
+- Cubism Core 由 Live2D 官方分发，有独立授权，**不能打包进产物**，需要你自行引入 `live2dcubismcore.min.js`；
+- 模型素材（`.model3.json`、贴图、动作）各有自己的授权，官方示例模型也有使用范围，**“能加载”不等于“可商用”**；
+- 本项目的 MIT 许可只覆盖组件代码，不覆盖 Cubism Core 与任何模型素材。
+
+放置方式、属性细节、验证记录见 [docs/live2d.md](./docs/live2d.md)。
 
 ## 属性
 

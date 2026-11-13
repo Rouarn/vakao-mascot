@@ -2,18 +2,19 @@
 
 一个固定在页面右下角的小看板娘组件：呼吸、眨眼、视线跟随、点击挥手与气泡。核心是**零依赖的 Web Component**（原生 JS + Shadow DOM + 内联 SVG 分层骨骼），React 与 Vue 封装以子路径形式随同一个包发布。
 
-- 单包多入口：`@vakao/mascot`、`/auto`、`/react`、`/vue`、`/vue/vite`
-- 核心 25.3 KB（gzip 7.1 KB），React 封装 2.0 KB，Vue 封装 2.3 KB
-- 无图片、无模型、无运行时依赖
+- 单包多入口：`@vakao/mascot`、`/auto`、`/react`、`/vue`、`/vue/vite`，另有可选的 `/live2d`
+- 核心 36.3 KB（gzip 10.6 KB），React 封装 2.0 KB，Vue 封装 2.3 KB，Live2D 子路径 8.1 KB（不含 pixi 与运行时）
+- 默认角色零图片、零模型、零运行时依赖；Live2D 子路径的 pixi 依赖默认不安装
+- 角色可替换：按骨骼契约注入自定义 SVG，或按需接入 Live2D 模型
 - React / Vue 是**可选 peer 依赖**，只做原生接入时不会被迫安装框架
-- 角色为自绘原创形象，不使用任何受版权保护的模型或立绘
+- 默认角色为自绘原创形象，不使用任何受版权保护的模型或立绘
 
 完整用法（安装、属性、事件、CSS 变量、框架接入）见 [packages/mascot/README.md](./packages/mascot/README.md)。
 
 ## 目录结构
 
 ```
-packages/mascot   @vakao/mascot —— 单包，含 core / auto / react / vue / vue/vite 五个入口
+packages/mascot   @vakao/mascot —— 单包，含 core / auto / react / vue / vue/vite 五个主入口，以及可选的 live2d 子路径
 examples/         三个基于构建产物的可运行示例（原生 / React / Vue）
 ```
 
@@ -53,9 +54,11 @@ import { VakaoMascot } from '@vakao/mascot/vue';
 
 ## 测试与验证
 
-- 单元测试 16 个：core（渲染、属性、事件、视线、reduced-motion、SSR）、React（挂载、事件、属性同步、SSR）、Vue（挂载、事件、属性同步、SSR、编译助手）。
+- 单元测试 23 个：core（渲染、属性、事件、视线、reduced-motion、SSR）、自定义 SVG 角色（注入、回退、清洗）、React（挂载、事件、属性同步、SSR）、Vue（挂载、事件、属性同步、SSR、编译助手）、Live2D（注册、缺 Core / 缺 src 的错误提示）。
 - 三个示例都使用**构建后的 dist 产物**启动，并在隔离 headless Chrome 中实际跑通：自定义元素升级、Shadow DOM 渲染、视线跟随、点击触发 greet、控制台无错误。
-- `pnpm pack` 产物为单包，五个子路径在打包后仍可正确解析（在示例中以打包产物实际导入验证）。
+- 自定义 SVG 角色与默认角色在同一页面实测：两者都响应视线、眨眼、点击，自定义角色没有残留默认节点。
+- Live2D 子路径用官方免费示例 Haru 实测：模型加载、右下角定位、点击动作与视线 API 均生效。
+- `pnpm pack` 产物为单包，各子路径在打包后仍可正确解析（以打包产物实际导入验证）。
 
 ## 许可与素材来源
 

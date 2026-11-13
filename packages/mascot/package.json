@@ -1,7 +1,7 @@
 {
   "name": "@vakao/mascot",
   "version": "0.1.0",
-  "description": "零依赖的右下角看板娘 Web Component，内置呼吸、眨眼与视线跟随，并以子路径提供可选的 React / Vue 封装。",
+  "description": "零依赖的右下角看板娘 Web Component，内置呼吸、眨眼与视线跟随；支持自定义 SVG 骨骼与可选的 Live2D 模型，并以子路径提供 React / Vue 封装。",
   "license": "MIT",
   "type": "module",
   "author": "Rouarn <2937375029@qq.com> (https://github.com/Rouarn)",
@@ -46,14 +46,30 @@
       "import": "./dist/vue-vite.js",
       "default": "./dist/vue-vite.js"
     },
+    "./live2d": {
+      "types": "./dist/live2d.d.ts",
+      "import": "./dist/live2d.js",
+      "default": "./dist/live2d.js"
+    },
     "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {
-      "auto": ["dist/auto.d.ts"],
-      "react": ["dist/react.d.ts"],
-      "vue": ["dist/vue.d.ts"],
-      "vue/vite": ["dist/vue-vite.d.ts"]
+      "auto": [
+        "dist/auto.d.ts"
+      ],
+      "react": [
+        "dist/react.d.ts"
+      ],
+      "vue": [
+        "dist/vue.d.ts"
+      ],
+      "vue/vite": [
+        "dist/vue-vite.d.ts"
+      ],
+      "live2d": [
+        "dist/live2d.d.ts"
+      ]
     }
   },
   "files": [
@@ -63,7 +79,8 @@
     "README.md"
   ],
   "sideEffects": [
-    "./dist/auto.js"
+    "./dist/auto.js",
+    "./dist/live2d.js"
   ],
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json",
@@ -82,10 +99,18 @@
     "vakao"
   ],
   "peerDependencies": {
+    "pixi-live2d-display": "^0.4.0",
+    "pixi.js": "^6.5.0",
     "react": ">=18.0.0",
     "vue": "^3.3.0"
   },
   "peerDependenciesMeta": {
+    "pixi-live2d-display": {
+      "optional": true
+    },
+    "pixi.js": {
+      "optional": true
+    },
     "react": {
       "optional": true
     },
@@ -95,5 +120,9 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "pixi-live2d-display": "0.4.0",
+    "pixi.js": "6.5.10"
   }
 }
