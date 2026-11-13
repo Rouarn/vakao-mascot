@@ -1,4 +1,4 @@
-import { VAKAO_MASCOT_TAG } from '@vakao/mascot';
+import { VAKAO_MASCOT_TAG } from './index';
 
 export interface VueCompilerOptionsLike {
   isCustomElement?: (tag: string) => boolean;
@@ -22,7 +22,7 @@ export function isVakaoMascotTag(tag: string): boolean {
  *
  * ```ts
  * import vue from '@vitejs/plugin-vue';
- * import { withVakaoMascot } from '@vakao/mascot-vue/vite';
+ * import { withVakaoMascot } from '@vakao/mascot/vue/vite';
  *
  * export default defineConfig({ plugins: [vue(withVakaoMascot())] });
  * ```

@@ -1,12 +1,12 @@
 import { defineComponent, h, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import type { PropType } from 'vue';
-import { MASCOT_EVENTS, VAKAO_MASCOT_TAG, defineVakaoMascot } from '@vakao/mascot';
+import { MASCOT_EVENTS, VAKAO_MASCOT_TAG, defineVakaoMascot } from './index';
 import type {
   MascotGreetDetail,
   MascotReadyDetail,
   MascotTheme,
   VakaoMascotElement,
-} from '@vakao/mascot';
+} from './index';
 
 /**
  * Vue 3 封装。

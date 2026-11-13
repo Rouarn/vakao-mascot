@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import { withVakaoMascot } from '@vakao/mascot-vue/vite';
+import { withVakaoMascot } from '@vakao/mascot/vue/vite';
 
 export default defineConfig({
   base: './',

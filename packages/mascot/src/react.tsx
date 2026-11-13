@@ -12,13 +12,13 @@ import {
   MASCOT_EVENTS,
   VAKAO_MASCOT_TAG,
   defineVakaoMascot,
-} from '@vakao/mascot';
+} from './index';
 import type {
   MascotGreetDetail,
   MascotReadyDetail,
   MascotTheme,
   VakaoMascotElement,
-} from '@vakao/mascot';
+} from './index';
 
 export interface VakaoMascotProps extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
   /** 角色最大宽度，像素，默认 210。 */

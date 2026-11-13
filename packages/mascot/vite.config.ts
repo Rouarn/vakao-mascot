@@ -7,13 +7,16 @@ export default defineConfig({
     lib: {
       entry: {
         index: 'src/index.ts',
-        vite: 'src/vite.ts',
+        auto: 'src/auto.ts',
+        react: 'src/react.tsx',
+        vue: 'src/vue.ts',
+        'vue-vite': 'src/vue-vite.ts',
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      external: ['vue', '@vakao/mascot'],
+      external: ['react', 'react-dom', 'react/jsx-runtime', 'vue'],
     },
   },
 });

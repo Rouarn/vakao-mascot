@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isVakaoMascotTag, withVakaoMascot } from './vite';
+import { isVakaoMascotTag, withVakaoMascot } from './vue-vite';
 
 describe('withVakaoMascot', () => {
   it('marks the mascot tag as a custom element', () => {

@@ -1,0 +1,98 @@
+{
+  "name": "@vakao/mascot",
+  "version": "0.1.0",
+  "description": "Dependency-free bottom-right mascot Web Component with breathing, blinking and gaze tracking, plus optional React and Vue bindings.",
+  "license": "MIT",
+  "type": "module",
+  "author": "Rouarn <2937375029@qq.com> (https://github.com/Rouarn)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rouarn/vakao-mascot.git",
+    "directory": "packages/mascot"
+  },
+  "homepage": "https://github.com/Rouarn/vakao-mascot/tree/main/packages/mascot#readme",
+  "bugs": {
+    "url": "https://github.com/Rouarn/vakao-mascot/issues"
+  },
+  "publishConfig": {
+    "registry": "https://packages.aliyun.com/676d377c721f4dc7be6ca65a/npm/npm-registry/"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./auto": {
+      "types": "./dist/auto.d.ts",
+      "import": "./dist/auto.js",
+      "default": "./dist/auto.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js",
+      "default": "./dist/react.js"
+    },
+    "./vue": {
+      "types": "./dist/vue.d.ts",
+      "import": "./dist/vue.js",
+      "default": "./dist/vue.js"
+    },
+    "./vue/vite": {
+      "types": "./dist/vue-vite.d.ts",
+      "import": "./dist/vue-vite.js",
+      "default": "./dist/vue-vite.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "auto": ["dist/auto.d.ts"],
+      "react": ["dist/react.d.ts"],
+      "vue": ["dist/vue.d.ts"],
+      "vue/vite": ["dist/vue-vite.d.ts"]
+    }
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "sideEffects": [
+    "./dist/auto.js"
+  ],
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "dev": "vite build --watch",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "mascot",
+    "web-component",
+    "custom-element",
+    "live2d-like",
+    "react",
+    "vue",
+    "vakao"
+  ],
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "vue": "^3.3.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

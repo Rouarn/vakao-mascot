@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { VakaoMascot } from '@vakao/mascot-vue';
+import { VakaoMascot } from '@vakao/mascot/vue';
 import type { MascotGreetDetail } from '@vakao/mascot';
 
 const count = ref(0);
@@ -16,7 +16,7 @@ function handleGreet(event: CustomEvent<MascotGreetDetail>): void {
   <header>
     <div class="wrap bar">
       <div class="brand"><span class="dot" /> vakao-mascot</div>
-      <span class="tag">Vue 3 / @vakao/mascot-vue</span>
+      <span class="tag">Vue 3 / @vakao/mascot/vue</span>
     </div>
   </header>
 
@@ -53,7 +53,7 @@ function handleGreet(event: CustomEvent<MascotGreetDetail>): void {
   </main>
 
   <footer>
-    <div class="wrap">构建产物：packages/vue/dist · peer 依赖 vue ^3.3</div>
+    <div class="wrap">构建产物：@vakao/mascot/vue · peer 依赖 vue ^3.3</div>
   </footer>
 
   <VakaoMascot

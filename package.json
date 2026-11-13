@@ -5,6 +5,15 @@
   "type": "module",
   "description": "A tiny, dependency-free bottom-right mascot Web Component with React and Vue bindings.",
   "license": "MIT",
+  "author": "Rouarn <2937375029@qq.com> (https://github.com/Rouarn)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rouarn/vakao-mascot.git"
+  },
+  "homepage": "https://github.com/Rouarn/vakao-mascot#readme",
+  "bugs": {
+    "url": "https://github.com/Rouarn/vakao-mascot/issues"
+  },
   "packageManager": "pnpm@12.16.1",
   "engines": {
     "node": ">=18"

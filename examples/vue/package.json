@@ -9,8 +9,8 @@
     "preview": "vite preview --port 8803 --strictPort"
   },
   "dependencies": {
-    "@vakao/mascot-vue": "workspace:^",
-    "vue": "^3.5.45"
+    "vue": "^3.5.45",
+    "@vakao/mascot": "workspace:^"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.11",

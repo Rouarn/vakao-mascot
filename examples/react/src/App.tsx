@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { VakaoMascot } from '@vakao/mascot-react';
+import { VakaoMascot } from '@vakao/mascot/react';
 
 export default function App() {
   const [count, setCount] = useState(0);
@@ -10,7 +10,7 @@ export default function App() {
       <header>
         <div className="wrap bar">
           <div className="brand"><span className="dot" /> vakao-mascot</div>
-          <span className="tag">React 19 / @vakao/mascot-react</span>
+          <span className="tag">React 19 / @vakao/mascot/react</span>
         </div>
       </header>
 
@@ -47,7 +47,7 @@ export default function App() {
       </main>
 
       <footer>
-        <div className="wrap">构建产物：packages/react/dist · peer 依赖 react &gt;= 18</div>
+        <div className="wrap">构建产物：@vakao/mascot/react · peer 依赖 react &gt;= 18</div>
       </footer>
 
       <VakaoMascot

@@ -2,7 +2,7 @@
 
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { VakaoMascot } from './index';
+import { VakaoMascot } from './react';
 
 describe('VakaoMascot (React SSR)', () => {
   it('renders markup without touching DOM globals', () => {
