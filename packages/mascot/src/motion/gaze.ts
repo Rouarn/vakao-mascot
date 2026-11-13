@@ -1,4 +1,4 @@
-import type { MascotRig } from '../render/rig';
+import type { MascotRig } from '../rig/parse';
 import { clamp } from '../core/utils';
 
 /** 视线状态：tx / ty 是目标，x / y 是阻尼后的当前值。 */
@@ -34,13 +34,15 @@ export function easeGaze(gaze: GazeState): void {
   gaze.y += (gaze.ty - gaze.y) * 0.085;
 }
 
-/** 把当前视线值写到两只瞳孔的 transform 上。 */
-export function applyGaze(
-  refs: Pick<MascotRig, 'irisL' | 'irisR'>,
-  gaze: GazeState,
-): void {
-  const dx = (gaze.x * 3.4).toFixed(2);
-  const dy = (gaze.y * 2.8).toFixed(2);
-  refs.irisL.setAttribute('transform', `translate(${dx} ${dy})`);
-  refs.irisR.setAttribute('transform', `translate(${dx} ${dy})`);
+/**
+ * 把当前视线值写到两只瞳孔的 transform 上。
+ * 自定义角色没提供瞳孔节点时，视线仍会驱动头部倾斜。
+ */
+export function applyGaze(rig: MascotRig, gaze: GazeState): void {
+  if (!rig.irisL || !rig.irisR) return;
+
+  const dx = (gaze.x * rig.gazeRange.x).toFixed(2);
+  const dy = (gaze.y * rig.gazeRange.y).toFixed(2);
+  rig.irisL.setAttribute('transform', `translate(${dx} ${dy})`);
+  rig.irisR.setAttribute('transform', `translate(${dx} ${dy})`);
 }

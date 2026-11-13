@@ -125,6 +125,41 @@ import '@vakao/mascot/auto';
 
 `withVakaoMascot()` 会保留你已有的 `isCustomElement` 判断。
 
+## 自定义角色（SVG 骨骼）
+
+默认角色只是内置的一份 SVG。只要按契约给你的 SVG 打上 `data-rig` 标记，呼吸、眨眼、视线跟随、点击挥手与气泡都会复用同一套逻辑：
+
+```html
+<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+  <g data-rig="rig" data-rig-origin="50 118">
+    <g data-rig="head" data-rig-pivot="50 45">
+      <circle cx="50" cy="45" r="30" fill="#ffd9c2"/>
+      <g data-rig="eye-left"><circle data-rig="iris-left" cx="42" cy="42" r="4"/></g>
+      <g data-rig="eye-right"><circle data-rig="iris-right" cx="58" cy="42" r="4"/></g>
+    </g>
+    <g data-rig="arm-right" data-rig-pivot="70 80">
+      <rect x="66" y="78" width="8" height="20" rx="4"/>
+    </g>
+  </g>
+</svg>
+```
+
+```js
+import { defineVakaoMascotRig } from '@vakao/mascot';
+
+defineVakaoMascotRig('mini', svgMarkup);
+
+const mascot = document.querySelector('vakao-mascot');
+mascot.rig = 'mini';        // 也可以直接给 SVG 字符串 / 元素
+// mascot.resetRig();       // 恢复默认角色
+```
+
+必需节点是 `head`、`eye-left`、`eye-right`，其余节点（瞳孔、后发、侧发、手臂、阴影、闭眼图形）都是可选的；缺失的可选节点会跳过对应动画。
+
+注入的 SVG 会先清洗：移除 `<script>`、事件属性、外部引用与非本地 `<use>`，避免把 SVG 注入变成 XSS 入口；缺少必需节点或解析失败时会打印错误并回退默认角色。
+
+完整的节点表、锚点属性、视口约定与参数范围见 [docs/rig-contract.md](./docs/rig-contract.md)。
+
 ## 属性
 
 | 属性 | 类型 | 默认值 | 说明 |

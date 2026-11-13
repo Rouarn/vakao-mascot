@@ -12,8 +12,11 @@ import type {
 } from './types';
 import { clamp, toSize } from './utils';
 import { getMascotTemplate } from '../render/template';
-import { queryRig } from '../render/rig';
-import type { MascotRig } from '../render/rig';
+import { buildMascotRig, normalizeRigSvg } from '../rig/parse';
+import type { MascotRig } from '../rig/parse';
+import { RIG_CONTRACT_DOC } from '../rig/contract';
+import { getVakaoMascotRig } from '../rig/registry';
+import { sanitizeRigSvg } from '../rig/sanitize';
 import { applyBlink, createBlinkState, updateBlink } from '../motion/blink';
 import type { BlinkState } from '../motion/blink';
 import { applyGaze, createGazeState, easeGaze, trackGaze } from '../motion/gaze';
@@ -30,10 +33,12 @@ const HTMLElementBase = (
 
 export class VakaoMascotElement extends HTMLElementBase {
   static get observedAttributes(): string[] {
-    return ['size', 'greeting', 'theme', 'accent', 'label'];
+    return ['size', 'greeting', 'theme', 'accent', 'label', 'rig'];
   }
 
   private _refs!: MascotRig;
+  private _rigSource: string | SVGElement | null = null;
+  private _avatarListener: HTMLButtonElement | null = null;
 
   private _running = false;
   private _raf = 0;
@@ -45,6 +50,23 @@ export class VakaoMascotElement extends HTMLElementBase {
   private _gaze: GazeState = createGazeState();
   private _blink: BlinkState = createBlinkState();
   private _waveUntil = 0;
+
+  /** 自定义角色来源：SVG 字符串、SVG 元素，或已注册的名称。 */
+  get rig(): string | SVGElement | null {
+    return this._rigSource ?? this.getAttribute('rig');
+  }
+
+  set rig(value: string | SVGElement | null) {
+    this._rigSource = value ?? null;
+    if (this.isConnected) this._rebuild();
+  }
+
+  /** 恢复默认角色。 */
+  resetRig(): void {
+    this._rigSource = null;
+    if (this.hasAttribute('rig')) this.removeAttribute('rig');
+    if (this.isConnected) this._rebuild();
+  }
 
   get size(): number {
     return toSize(this.getAttribute('size'));
@@ -121,6 +143,10 @@ export class VakaoMascotElement extends HTMLElementBase {
     if (oldValue === newValue) return;
     if (name === 'size' || name === 'accent' || name === 'label') {
       this._applyStyles();
+      return;
+    }
+    if (name === 'rig' && this.isConnected && this._rigSource === null) {
+      this._rebuild();
     }
   }
 
@@ -164,10 +190,87 @@ export class VakaoMascotElement extends HTMLElementBase {
     };
   }
 
+  /** 解析属性 / 属性值 / 注册表里的角色来源。 */
+  private _resolveRigSource(): string | SVGElement | null {
+    const input = this._rigSource ?? this.getAttribute('rig');
+    if (!input) return null;
+
+    if (typeof input !== 'string') return input;
+
+    const value = input.trim();
+    if (!value) return null;
+    if (value.startsWith('<')) return input;
+
+    const registered = getVakaoMascotRig(value);
+    if (registered) return registered;
+
+    const node = typeof document === 'undefined' ? null : document.getElementById(value);
+    if (node instanceof HTMLTemplateElement) return node.innerHTML;
+    if (node instanceof SVGElement) return node;
+
+    console.error(
+      `[vakao-mascot] 找不到名为 “${value}” 的自定义角色，已回退默认角色。` +
+        `可使用 defineVakaoMascotRig() 注册，或让 rig 指向文档中的 <template> / <svg> id。契约见 ${RIG_CONTRACT_DOC}。`,
+    );
+    return null;
+  }
+
+  /** 把自定义 SVG 注入到角色按钮里；非法内容保持默认角色。 */
+  private _injectCustomRig(root: ShadowRoot, source: string | SVGElement): boolean {
+    const svg = sanitizeRigSvg(source);
+    if (!svg) {
+      console.error(
+        `[vakao-mascot] 自定义角色不是合法的 SVG，已回退默认角色。契约见 ${RIG_CONTRACT_DOC}。`,
+      );
+      return false;
+    }
+
+    const shell = root.querySelector('.avatar svg');
+    if (!shell) return false;
+
+    shell.replaceWith(normalizeRigSvg(svg));
+    return true;
+  }
+
   private _render(): void {
-    const root = this.attachShadow({ mode: 'open' });
-    root.appendChild(getMascotTemplate().content.cloneNode(true));
-    this._refs = queryRig(root);
+    const root = this.shadowRoot ?? this.attachShadow({ mode: 'open' });
+    root.replaceChildren(getMascotTemplate().content.cloneNode(true));
+
+    const source = this._resolveRigSource();
+    if (source) this._injectCustomRig(root, source);
+
+    let result = buildMascotRig(root);
+
+    if (!result.rig) {
+      console.error(
+        `[vakao-mascot] 自定义角色缺少必需节点：${result.missing.join('、')}，已回退默认角色。` +
+          `契约见 ${RIG_CONTRACT_DOC}。`,
+      );
+      root.replaceChildren(getMascotTemplate().content.cloneNode(true));
+      result = buildMascotRig(root);
+    }
+
+    this._refs = result.rig!;
+    this._attachAvatar();
+  }
+
+  /** 角色切换后重建 Shadow DOM，并保留运行中的动画循环。 */
+  private _rebuild(): void {
+    this._detachAvatar();
+    this._transformsCleared = false;
+    this._render();
+    this._applyStyles();
+  }
+
+  private _attachAvatar(): void {
+    this._detachAvatar();
+    this._refs.avatar.addEventListener('click', this._onClick);
+    this._avatarListener = this._refs.avatar;
+  }
+
+  private _detachAvatar(): void {
+    this._avatarListener?.removeEventListener('click', this._onClick);
+    this._avatarListener = null;
   }
 
   private _applyStyles(): void {
@@ -204,7 +307,7 @@ export class VakaoMascotElement extends HTMLElementBase {
     window.addEventListener('pointermove', this._onPointerMove, { passive: true });
     window.addEventListener('touchstart', this._onPointerMove, { passive: true });
     document.addEventListener('visibilitychange', this._onVisibility);
-    this._refs.avatar.addEventListener('click', this._onClick);
+    this._attachAvatar();
 
     this._readyRaf = requestAnimationFrame(this._emitReady);
     this._raf = requestAnimationFrame(this._tick);
@@ -219,7 +322,7 @@ export class VakaoMascotElement extends HTMLElementBase {
     window.removeEventListener('pointermove', this._onPointerMove);
     window.removeEventListener('touchstart', this._onPointerMove);
     document.removeEventListener('visibilitychange', this._onVisibility);
-    this._refs?.avatar?.removeEventListener('click', this._onClick);
+    this._detachAvatar();
     this._motionQuery?.removeEventListener?.('change', this._onMotionChange);
   }
 

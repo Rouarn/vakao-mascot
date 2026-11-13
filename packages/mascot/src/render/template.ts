@@ -92,7 +92,7 @@ const TEMPLATE_HTML = `
 <div class="stage">
   <div class="bubble" role="status" aria-live="polite"></div>
   <button class="avatar" type="button" aria-label="和看板娘打个招呼">
-    <svg viewBox="0 0 220 260" role="img" aria-hidden="true" focusable="false">
+    <svg viewBox="0 0 220 260" role="img" aria-hidden="true" focusable="false" data-rig-gaze="3.4 2.8">
       <defs>
         <linearGradient id="hairGrad" x1="0" y1="0" x2="0.2" y2="1">
           <stop offset="0" stop-color="#ffd3ae"/>
@@ -118,10 +118,10 @@ const TEMPLATE_HTML = `
         </linearGradient>
       </defs>
 
-      <ellipse id="groundShadow" cx="110" cy="249" rx="48" ry="8" fill="#1e2836" opacity="0.16"/>
+      <ellipse id="groundShadow" data-rig="shadow" cx="110" cy="249" rx="48" ry="8" fill="#1e2836" opacity="0.16"/>
 
-      <g id="rig">
-        <g id="hairBack">
+      <g id="rig" data-rig="rig" data-rig-origin="110 248">
+        <g id="hairBack" data-rig="hair-back" data-rig-pivot="110 62">
           <path d="M110 36 C 73 36 55 66 58 108 C 60 142 64 166 70 181 C 78 185 88 181 92 174
                    C 84 156 80 132 82 108 C 84 82 94 66 110 66 C 126 66 136 82 138 108
                    C 140 132 136 156 128 174 C 132 181 142 185 150 181 C 156 166 160 142 162 108
@@ -133,7 +133,7 @@ const TEMPLATE_HTML = `
                 fill="#c87f53" opacity="0.45"/>
         </g>
 
-        <g id="body">
+        <g id="body" data-rig="body">
           <g id="legs">
             <rect x="93" y="212" width="13" height="28" rx="6.5" fill="#ffe0cc"/>
             <rect x="114" y="212" width="13" height="28" rx="6.5" fill="#ffe0cc"/>
@@ -172,7 +172,7 @@ const TEMPLATE_HTML = `
           <path d="M104 174 Q110 179 116 174" fill="none" stroke="#d97658" stroke-width="1.4" stroke-linecap="round"/>
         </g>
 
-        <g id="head">
+        <g id="head" data-rig="head" data-rig-pivot="110 152">
           <path d="M66 122 q-7 1 -6 7 q1 6 8 6 z" fill="#ffe0cc"/>
           <path d="M154 122 q7 1 6 7 q-1 6 -8 6 z" fill="#ffe0cc"/>
 
@@ -183,10 +183,10 @@ const TEMPLATE_HTML = `
           <ellipse cx="80" cy="140" rx="8" ry="4.5" fill="#f79c8e" opacity="0.42"/>
           <ellipse cx="140" cy="140" rx="8" ry="4.5" fill="#f79c8e" opacity="0.42"/>
 
-          <g id="eyeL" class="eye">
-            <g class="eye-open">
+          <g id="eyeL" class="eye" data-rig="eye-left">
+            <g class="eye-open" data-rig="eye-open">
               <ellipse cx="91" cy="124" rx="11.5" ry="13.5" fill="#fffdf9"/>
-              <g id="irisL">
+              <g id="irisL" data-rig="iris-left">
                 <circle cx="91" cy="124" r="9" fill="url(#irisGrad)"/>
                 <circle cx="91" cy="125" r="4.4" fill="#173f3c"/>
                 <circle cx="88" cy="120" r="3.1" fill="#ffffff" opacity="0.95"/>
@@ -195,14 +195,14 @@ const TEMPLATE_HTML = `
               <path d="M79.5 122.5 A 11.5 13.5 0 0 1 102.5 122.5"
                     fill="none" stroke="#4a3a38" stroke-width="3.4" stroke-linecap="round"/>
             </g>
-            <path class="eye-closed" d="M80 122 Q91 131 102 122" fill="none"
+            <path class="eye-closed" data-rig="eye-closed" d="M80 122 Q91 131 102 122" fill="none"
                   stroke="#4a3a38" stroke-width="3.2" stroke-linecap="round"/>
           </g>
 
-          <g id="eyeR" class="eye">
-            <g class="eye-open">
+          <g id="eyeR" class="eye" data-rig="eye-right">
+            <g class="eye-open" data-rig="eye-open">
               <ellipse cx="129" cy="124" rx="11.5" ry="13.5" fill="#fffdf9"/>
-              <g id="irisR">
+              <g id="irisR" data-rig="iris-right">
                 <circle cx="129" cy="124" r="9" fill="url(#irisGrad)"/>
                 <circle cx="129" cy="125" r="4.4" fill="#173f3c"/>
                 <circle cx="126" cy="120" r="3.1" fill="#ffffff" opacity="0.95"/>
@@ -211,7 +211,7 @@ const TEMPLATE_HTML = `
               <path d="M117.5 122.5 A 11.5 13.5 0 0 1 140.5 122.5"
                     fill="none" stroke="#4a3a38" stroke-width="3.4" stroke-linecap="round"/>
             </g>
-            <path class="eye-closed" d="M118 122 Q129 131 140 122" fill="none"
+            <path class="eye-closed" data-rig="eye-closed" d="M118 122 Q129 131 140 122" fill="none"
                   stroke="#4a3a38" stroke-width="3.2" stroke-linecap="round"/>
           </g>
 
@@ -225,13 +225,13 @@ const TEMPLATE_HTML = `
           <path d="M84 62 C 96 49 124 47 138 59" fill="none" stroke="#ffe0c4"
                 stroke-width="3.4" stroke-linecap="round" opacity="0.45"/>
 
-          <g id="lockL">
+          <g id="lockL" data-rig="lock-left" data-rig-pivot="74 110">
             <path d="M66 94 C 56 118 56 148 61 176 C 68 176 75 172 78 166
                      C 71 144 71 118 76 96 Z" fill="url(#hairGrad)"/>
             <path d="M67 108 C 63 130 63 152 66 170" fill="none" stroke="#c87f53"
                   stroke-width="2" opacity="0.35" stroke-linecap="round"/>
           </g>
-          <g id="lockR">
+          <g id="lockR" data-rig="lock-right" data-rig-pivot="146 110">
             <path d="M154 94 C 164 118 164 148 159 176 C 152 176 145 172 142 166
                      C 149 144 149 118 144 96 Z" fill="url(#hairGrad)"/>
             <path d="M153 108 C 157 130 157 152 154 170" fill="none" stroke="#c87f53"
@@ -243,14 +243,14 @@ const TEMPLATE_HTML = `
           <circle cx="150" cy="86" r="2.4" fill="#fff6da"/>
         </g>
 
-        <g id="armL">
+        <g id="armL" data-rig="arm-left" data-rig-pivot="87 172">
           <path d="M84 169 C 74 175 70 190 72 203 C 76 208 84 207 85 201 C 85 190 87 180 91 173 Z"
                 fill="url(#hoodieGrad)"/>
           <path d="M84 170 C 75 176 71 190 73 202" fill="none" stroke="#e2d3ba" stroke-width="1.8" stroke-linecap="round"/>
           <path d="M73 199 q6 4 11 1" fill="none" stroke="#e2d3ba" stroke-width="1.6" stroke-linecap="round"/>
           <circle cx="78" cy="206" r="6" fill="#ffe0cc"/>
         </g>
-        <g id="armR">
+        <g id="armR" data-rig="arm-right" data-rig-pivot="133 172">
           <path d="M136 169 C 146 175 150 190 148 203 C 144 208 136 207 135 201 C 135 190 133 180 129 173 Z"
                 fill="url(#hoodieGrad)"/>
           <path d="M136 170 C 145 176 149 190 147 202" fill="none" stroke="#e2d3ba" stroke-width="1.8" stroke-linecap="round"/>

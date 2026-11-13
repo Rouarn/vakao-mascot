@@ -1,13 +1,18 @@
-import type { MascotRig } from '../render/rig';
-import type { GazeState } from './gaze';
+import type { MascotRig } from '../rig/parse';
 
-const RESTING_NODES = ['rig', 'head', 'hairBack', 'lockL', 'lockR', 'armL', 'armR'] as const;
+const transformNodes = (rig: MascotRig) =>
+  [rig.root, rig.head, rig.hairBack, rig.lockL, rig.lockR, rig.armL, rig.armR].filter(
+    (node): node is NonNullable<typeof node> => Boolean(node),
+  );
 
 /** 清除所有动画 transform，恢复到静态姿势（reduced-motion 用）。 */
-export function clearRigTransforms(refs: MascotRig): void {
-  RESTING_NODES.forEach((key) => refs[key].removeAttribute('transform'));
-  refs.groundShadow.setAttribute('rx', '48');
-  refs.groundShadow.setAttribute('opacity', '0.16');
+export function clearRigTransforms(rig: MascotRig): void {
+  transformNodes(rig).forEach((node) => node.removeAttribute('transform'));
+
+  if (rig.shadow) {
+    rig.shadow.setAttribute('rx', String(rig.shadowRx));
+    rig.shadow.setAttribute('opacity', '0.16');
+  }
 }
 
 /**
@@ -15,9 +20,9 @@ export function clearRigTransforms(refs: MascotRig): void {
  * 呼吸、身体摆动、头部倾斜、头发与手臂跟随、挥手。
  */
 export function applyRigTransforms(
-  refs: MascotRig,
+  rig: MascotRig,
   now: number,
-  gaze: GazeState,
+  gaze: { x: number; y: number },
   waveUntil: number,
 ): void {
   const t = now / 1000;
@@ -26,32 +31,61 @@ export function applyRigTransforms(
   const wave = now < waveUntil;
   const wavePhase = wave ? Math.sin((waveUntil - now) / 52) : 0;
   const scaleY = 1 + breath * 0.012;
+  const origin = rig.origin;
 
-  refs.rig.setAttribute(
+  rig.root.setAttribute(
     'transform',
     `translate(0 ${(-Math.abs(breath) * 1.1).toFixed(2)}) ` +
-      `translate(110 248) scale(1 ${scaleY.toFixed(4)}) translate(-110 -248)`,
+      `translate(${origin.x} ${origin.y}) scale(1 ${scaleY.toFixed(4)}) ` +
+      `translate(${-origin.x} ${-origin.y})`,
   );
 
+  const headPivot = rig.headPivot;
   const headTilt = gaze.x * 6 + sway * 0.9 + (wave ? -2 : 0);
-  refs.head.setAttribute('transform', `rotate(${headTilt.toFixed(2)} 110 152)`);
-  refs.hairBack.setAttribute(
+  rig.head.setAttribute(
     'transform',
-    `rotate(${(sway * 0.7 - gaze.x * 0.8).toFixed(2)} 110 62)`,
+    `rotate(${headTilt.toFixed(2)} ${headPivot.x} ${headPivot.y})`,
   );
-  refs.lockL.setAttribute('transform', `rotate(${(sway * 1.1).toFixed(2)} 74 110)`);
-  refs.lockR.setAttribute('transform', `rotate(${(sway * 1.1).toFixed(2)} 146 110)`);
-  refs.groundShadow.setAttribute('rx', (48 + breath * 1.6).toFixed(2));
-  refs.groundShadow.setAttribute('opacity', (0.16 - breath * 0.015).toFixed(3));
 
-  refs.armL.setAttribute(
-    'transform',
-    `rotate(${(Math.sin(t * 1.1) * 1.6 + sway * 0.8).toFixed(2)} 87 172)`,
-  );
-  refs.armR.setAttribute(
-    'transform',
-    wave
-      ? `rotate(${(-105 + wavePhase * 11).toFixed(2)} 133 172)`
-      : `rotate(${(Math.sin(t * 1.1) * 1.6 - sway * 0.8).toFixed(2)} 133 172)`,
-  );
+  if (rig.hairBack) {
+    rig.hairBack.setAttribute(
+      'transform',
+      `rotate(${(sway * 0.7 - gaze.x * 0.8).toFixed(2)} ${rig.hairPivot.x} ${rig.hairPivot.y})`,
+    );
+  }
+
+  if (rig.lockL) {
+    rig.lockL.setAttribute(
+      'transform',
+      `rotate(${(sway * 1.1).toFixed(2)} ${rig.lockLPivot.x} ${rig.lockLPivot.y})`,
+    );
+  }
+
+  if (rig.lockR) {
+    rig.lockR.setAttribute(
+      'transform',
+      `rotate(${(sway * 1.1).toFixed(2)} ${rig.lockRPivot.x} ${rig.lockRPivot.y})`,
+    );
+  }
+
+  if (rig.shadow) {
+    rig.shadow.setAttribute('rx', (rig.shadowRx + breath * 1.6).toFixed(2));
+    rig.shadow.setAttribute('opacity', (0.16 - breath * 0.015).toFixed(3));
+  }
+
+  if (rig.armL) {
+    rig.armL.setAttribute(
+      'transform',
+      `rotate(${(Math.sin(t * 1.1) * 1.6 + sway * 0.8).toFixed(2)} ${rig.armLPivot.x} ${rig.armLPivot.y})`,
+    );
+  }
+
+  if (rig.armR) {
+    rig.armR.setAttribute(
+      'transform',
+      wave
+        ? `rotate(${(-105 + wavePhase * 11).toFixed(2)} ${rig.armRPivot.x} ${rig.armRPivot.y})`
+        : `rotate(${(Math.sin(t * 1.1) * 1.6 - sway * 0.8).toFixed(2)} ${rig.armRPivot.x} ${rig.armRPivot.y})`,
+    );
+  }
 }

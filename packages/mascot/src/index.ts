@@ -16,3 +16,9 @@ export type {
   VakaoMascotEventMap,
   VakaoMascotOptions,
 } from './core/types';
+
+export {
+  defineVakaoMascotRig,
+  getVakaoMascotRig,
+  listVakaoMascotRigs,
+} from './rig/registry';

@@ -1,4 +1,4 @@
-import type { MascotRig } from '../render/rig';
+import type { MascotRig } from '../rig/parse';
 
 /** 眨眼调度状态。start 为 0 表示当前没有进行中的眨眼。 */
 export interface BlinkState {
@@ -38,15 +38,22 @@ export function updateBlink(state: BlinkState, now: number): boolean {
   return closed;
 }
 
-/** 用透明度切换睁眼 / 闭眼两组图形。 */
-export function applyBlink(
-  refs: Pick<MascotRig, 'eyeOpen' | 'eyeClosed'>,
-  closed: boolean,
-): void {
-  refs.eyeOpen.forEach((node) => {
+/**
+ * 用透明度切换睁眼 / 闭眼两组图形。
+ * 自定义角色只有眼睛组、没有闭眼图形时，退化为纵向压缩眼睛组。
+ */
+export function applyBlink(rig: MascotRig, closed: boolean): void {
+  if (rig.blinkFallback) {
+    const transform = closed ? 'scaleY(0.12)' : '';
+    rig.eyeLeft.style.transform = transform;
+    rig.eyeRight.style.transform = transform;
+    return;
+  }
+
+  rig.eyeOpen.forEach((node) => {
     node.style.opacity = closed ? '0' : '1';
   });
-  refs.eyeClosed.forEach((node) => {
+  rig.eyeClosed.forEach((node) => {
     node.style.opacity = closed ? '1' : '0';
   });
 }
